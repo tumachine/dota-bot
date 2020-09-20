@@ -6,6 +6,7 @@ import {ipcRenderer, webFrame, remote, app } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import NeDB from 'nedb-promises';
+import ElectronStore from 'electron-store';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class ElectronService {
   childProcess: typeof childProcess;
   fs: typeof fs;
   nedb: typeof NeDB;
+  electronStore: ElectronStore;
   app: typeof app;
 
   get isElectron(): boolean {
@@ -36,6 +38,7 @@ export class ElectronService {
       this.childProcess = window.require('child_process');
       this.fs = window.require('fs');
       this.nedb = window.require('nedb-promises');
+      this.electronStore = window.require('electron-store');
     }
   }
 }

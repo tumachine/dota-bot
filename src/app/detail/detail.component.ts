@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DotaApiService} from "../core/services/dota-api.service";
-import {UserService} from '../core/services/user.service';
+import {SettingsService} from '../core/services/settings.service';
 import {switchMap} from 'rxjs/operators';
 
 @Component({
@@ -10,12 +10,12 @@ import {switchMap} from 'rxjs/operators';
 })
 export class DetailComponent implements OnInit {
 
-  constructor(private dotaApiService: DotaApiService, private userService: UserService) { }
+  constructor(private dotaApiService: DotaApiService, private settingsService: SettingsService) { }
 
   ngOnInit(): void {
-    this.userService.getUser(86228570).pipe(
-      switchMap(() => this.dotaApiService.getMatchDetails(5573803279))
-    ).subscribe(match => console.log(match))
+    // this.userService.getUser(86228570).pipe(
+    //   switchMap(() => this.dotaApiService.getMatchDetails(5573803279))
+    // ).subscribe(match => console.log(match))
   }
 
 }

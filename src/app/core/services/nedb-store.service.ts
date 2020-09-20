@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {from, Observable } from 'rxjs';
-import {RequestStore} from '../../../models/dota-store';
+import {RequestStore} from '../../../models/request-store';
 import {ElectronService} from './electron/electron.service';
 import Datastore from 'nedb-promises';
 import {removeKeys} from '../../../utils/utils';
+import {fromPromise} from "rxjs/internal-compatibility";
 
 @Injectable({
   providedIn: 'root'
 })
+// it is basically a wrapper over http
 export class NedbStoreService {
   db: { [name: string]: Datastore };
 
@@ -22,8 +24,9 @@ export class NedbStoreService {
     }
 
     this.db = {
+      // add functionality for receiving array of values
       dota: dbFactory('dota.db'),
-      user: dbFactory('user.db'),
+      steam: dbFactory('steam.db'),
     }
   }
 
@@ -35,19 +38,28 @@ export class NedbStoreService {
       url,
       params: paramsWithoutKey,
     })
+    console.log(doc);
 
     if (doc?.data) {
       console.log('returning DATABASE')
       return doc.data;
     } else {
       console.log('returning REQUEST')
-      const httpDoc = await this.http.get<T>(url, { params }).toPromise();
-      await store.insert({url, params: paramsWithoutKey, data: httpDoc});
-      return httpDoc;
+      try {
+        const httpDoc = await this.http.get<T>(url, { params }).toPromise();
+        await store.insert({url, params: paramsWithoutKey, data: httpDoc});
+        return httpDoc;
+      } catch (error) {
+        return error;
+      }
     }
   }
 
   dota<T>(url: string, params: HttpParams): Observable<T> {
     return from(this.storeRequest<T>(this.db.dota, url, params));
+  }
+
+  steam<T>(url: string, params: HttpParams): Observable<T> {
+    return fromPromise(this.storeRequest<T>(this.db.steam, url, params));
   }
 }

@@ -1,8 +1,4 @@
 export interface MatchDetails {
-  result: Result;
-}
-
-export interface Result {
   players:               Player[];
   radiantWin:            boolean;
   duration:              number;

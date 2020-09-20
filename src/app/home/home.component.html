@@ -1,7 +1,9 @@
-<div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
+<form [formGroup]="formGroup" (submit)="checkSteamId()">
+  <label for="steamId">Steam Id</label>
+  <input formControlName="steamId" id="steamId" />
 
-  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>
-</div>
+  <label for="dotaApiKey">Dota Api Key</label>
+  <input formControlName="dotaApiKey" id="dotaApiKey" />
+<!--  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>-->
+  <button type="submit">Submit</button>
+</form>
